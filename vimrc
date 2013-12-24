@@ -128,7 +128,7 @@ nnoremap <leader>ot :tabonly<CR>
 nnoremap <Tab> %
 vnoremap <Tab> %
 " Force saving files that require root permission
-cnoremap W w !sudo tee > /dev/null %
+cnoremap W<CR> w !sudo tee > /dev/null %<CR>
 
 " Switch window
 nnoremap <C-J> <C-W>j
