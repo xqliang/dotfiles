@@ -127,6 +127,8 @@ nnoremap <leader>ot :tabonly<CR>
 " Jump to matching pairs easily, with Tab
 nnoremap <Tab> %
 vnoremap <Tab> %
+" Force saving files that require root permission
+cnoremap W w !sudo tee > /dev/null %
 
 " Switch window
 nnoremap <C-J> <C-W>j
