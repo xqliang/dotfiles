@@ -1,6 +1,6 @@
 init:
-	ln -sf \`pwd\`/vimrc ~/.vimrc
-	ln -sf \`pwd\`/tmux.conf ~/.tmux.conf
+	ln -sf `pwd`/vimrc ~/.vimrc
+	ln -sf `pwd`/tmux.conf ~/.tmux.conf
 
 sync:
 	git pull
