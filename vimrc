@@ -89,7 +89,7 @@ endif
 " http://www.shallowsky.com/linux/noaltscreen.html
 " Or put it to .bashrc: export LESS="-X"
 set t_ti= t_te=
-set timeout timeoutlen=600 ttimeoutlen=100
+set timeout timeoutlen=800 ttimeoutlen=100
 
 
 " Color
@@ -97,8 +97,7 @@ syntax enable
 filetype plugin on
 
 " Hilight text over length (set colorcolumn=80)
-au BufWinEnter *.py,*.c,*.cpp,*.h let w:over80=matchadd('ErrorMsg', '\%>80v.\+', -1)
-au BufWinLeave *.py,*.c,*.cpp,*.h silent! matchdelete(w:over80)
+au BufEnter *.py,*.c,*.cpp,*.h let w:over80=matchadd('ErrorMsg', '\%>80v.\+', -1)
 au filetype python,java,javascript,css setlocal number
 au filetype vim,python,java,rst,ruby,javascript,css setlocal list
 
@@ -114,7 +113,7 @@ cnoremap ;; <C-U><Esc>
 " home row, equals to <ESC>,<C-C>,<C-[>
 inoremap ;; <Esc>
 inoremap jj <Esc>
-inoremap jw <Esc>:w<CR>
+inoremap jw <Esc>:w<CR>a
 " Quickly Esc, save file, close file and reload vimrc
 nnoremap <leader><leader>w :w<CR>
 nnoremap <leader><leader>q :q<CR>
@@ -137,6 +136,10 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
+
+" Split window
+nnoremap \ :vsp<space>
+nnoremap - :sp<space>
 
 " Bash like keys for the command line
 cnoremap <C-A> <Home>
@@ -244,10 +247,13 @@ Bundle 'pyflakes.vim'
 "   <F4> (re)Generate tags&cscope.out
 "   <F3> Add addtional ctags file
 Bundle 'autotags'
-let g:autotags_ctags_opts="--python-kinds=-iv --exclude=logs --c++-kinds=+p --fields=+ialS --extra=+q"
-let g:autotags_ctags_global_include=""
-let g:autotags_cscope_exe="/usr/local/bin/pycscope.py -i cscope.files -- "  " Default is 'cscope'
-let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx .c .idl"
+let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+p --fields=+ialS
+        \ --extra=+q"
+let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
+        \ .c .idl"
+au BufEnter *.py let g:autotags_no_global=1 | if executable('pycscope.py') |
+        \ let g:autotags_cscope_exe="pycscope.py -i cscope.files -- " | endif
+au BufLeave *.py let g:autotags_cscope_exe="cscope"
 
 
 " Cscope key mapping
@@ -310,6 +316,7 @@ Bundle 'echofunc.vim'
 Bundle 'buftabs'
 nnoremap <leader>bt :call Buftabs_show(-1)<CR>
 let g:buftabs_only_basename=1
+let g:buftabs_separator=" "
 
 
 " Insert or delete brackets, parens, quotes in pair
@@ -339,6 +346,8 @@ let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
 "   [count]<leader>cc       Comment out the current line or text selected
 "   [count]<leader>c<space> Toggles the comment state of the selected line(s)
 "   [count]<leader>cu       Uncomments the selected line(s)
+"   [count]<leader>cA       Adds comment delimiters to the end of line and goes
+"                           into insert mode between them. 
 Bundle 'scrooloose/nerdcommenter'
 
 
@@ -351,7 +360,7 @@ nnoremap <leader>nt :NERDTreeToggle<CR>
 Bundle 'Tagbar'
 nnoremap <leader>tb :TagbarToggle<CR>
 let g:tagbar_width=30
-autocmd FileType py,java,c,cpp silent! nested :TagbarOpen
+au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
 " Perform all your vim insert mode completions with Tab
