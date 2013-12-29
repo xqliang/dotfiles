@@ -255,8 +255,6 @@ let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx .c 
 "   <C-\>{s|g|d|c|t|e|f|i} Find symbol|definition|called by|calling this|
 "                          text string|egrep|file|files #including this file
 Bundle 'steffanc/cscopemaps.vim'
-set cscopequickfix=c-,d-,e-,g-,i-,s-,t- " Use QuickFix to show cscope results
-set csto=1 cscopetag nocscopeverbose
 
 
 " Text Objects based on Indentation Level
