@@ -89,6 +89,7 @@ endif
 " http://www.shallowsky.com/linux/noaltscreen.html
 " Or put it to .bashrc: export LESS="-X"
 set t_ti= t_te=
+set timeout timeoutlen=600 ttimeoutlen=100
 
 
 " Color
@@ -111,10 +112,11 @@ nnoremap ; :
 cnoremap ;; <C-U><Esc>
 " Quickly get out of insert mode without your fingers having to leave the
 " home row, equals to <ESC>,<C-C>,<C-[>
-inoremap <leader><leader><leader> <Esc>
+inoremap ;; <Esc>
+inoremap jj <Esc>
+inoremap jw <Esc>:w<CR>
 " Quickly Esc, save file, close file and reload vimrc
-inoremap <leader><leader>s <Esc>:w<CR>
-nnoremap <leader><leader>s :w<CR>
+nnoremap <leader><leader>w :w<CR>
 nnoremap <leader><leader>q :q<CR>
 nnoremap <leader><leader>r :so $MYVIMRC<CR>
 " Pull word under cursor into LHS of a substitute (for search and replace)
@@ -168,7 +170,10 @@ nnoremap F :call DictTranslate()<CR>
 set makeprg=g++\ -Wall\ -o\ %<.exe\ %
 func! CompileRun()
     exec "w"
-    if &filetype == "cpp"
+    if &filetype == "c"
+        exec "!gcc % -g -o %<.exe"
+        exec "!./%<.exe"
+    elseif &filetype == "cpp"
         exec "!g++ % -g -o %<.exe"
         exec "!./%<.exe"
     elseif &filetype == "java"
@@ -247,8 +252,8 @@ let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx .c 
 
 " Cscope key mapping
 " KEYS:
-"   <C-\>s|g|d|c|t|e|f|i Find symbol|definition|called by|calling this|
-"                        text string|egrep|file|files #including this file
+"   <C-\>{s|g|d|c|t|e|f|i} Find symbol|definition|called by|calling this|
+"                          text string|egrep|file|files #including this file
 Bundle 'steffanc/cscopemaps.vim'
 set cscopequickfix=c-,d-,e-,g-,i-,s-,t- " Use QuickFix to show cscope results
 set csto=1 cscopetag nocscopeverbose
