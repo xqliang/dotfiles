@@ -226,6 +226,18 @@ map <F5> :call CompileRun()<CR>
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
 
+" Auto setting up Vundle
+" see http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+let iCanHazVundle=1
+let vundleReadme=expand('~/.vim/bundle/vundle/README.md')
+if !filereadable(vundleReadme)
+    echo "Installing Vundle..."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let iCanHazVundle=0
+endif
+
 set nocompatible              " be iMproved
 filetype off                  " required!
 
@@ -273,7 +285,7 @@ Bundle 'vim-indent-object'
 " KEYS:
 "   + Expand region
 "   - Shrink region
-Bundle 'terryma/vim-expand-region'
+"Bundle 'terryma/vim-expand-region'
 
 
 " Pairs of handy bracket mappings
@@ -416,3 +428,9 @@ endif
 
 
 filetype plugin indent on     " required!
+
+if iCanHazVundle == 0
+    echo "Installing Bundles, please ignore key map error messages"
+    echo ""
+    :BundleInstall
+endif
