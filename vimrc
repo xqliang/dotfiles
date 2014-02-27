@@ -108,10 +108,9 @@ au BufReadPost * exe "normal! g`\""
 " Custom key mappings
 let mapleader=","
 nnoremap ; :
-cnoremap ;; <C-U><Esc>
+cnoremap jj <C-U><Esc>
 " Quickly get out of insert mode without your fingers having to leave the
 " home row, equals to <ESC>,<C-C>,<C-[>
-inoremap ;; <Esc>
 inoremap jj <Esc>
 inoremap jw <Esc>:w<CR>a
 " Quickly Esc, save file, close file and reload vimrc
