@@ -66,7 +66,7 @@ endif
 set autoindent
 set backspace=indent,eol,start " Allow backspacing over everything in insert mode
 set cursorline
-set expandtab
+set noexpandtab
 set foldmethod=syntax
 set foldlevel=100        " Do not fold when open file
 set foldcolumn=0         " No fold column
@@ -97,7 +97,7 @@ syntax enable
 filetype plugin on
 
 " Hilight text over length (set colorcolumn=80)
-au BufEnter *.py,*.c,*.cpp,*.h let w:over80=matchadd('ErrorMsg', '\%>80v.\+', -1)
+au BufEnter *.py,*.c,*.cpp,*.h silent! set colorcolumn=80
 au filetype python,java,javascript,css setlocal number
 au filetype vim,python,java,rst,ruby,javascript,css setlocal list
 
@@ -136,10 +136,7 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
-
-" Split window
-nnoremap \ :vsp<space>
-nnoremap - :sp<space>
+nnoremap <C-_> <C-W>_
 
 " Bash like keys for the command line
 cnoremap <C-A> <Home>
@@ -194,7 +191,7 @@ func! CompileRun()
     elseif &filetype == "lua"
         exec "!lua %<.lua"
     elseif &filetype == "sh"
-        exec "!bash %<.sh"
+        exec "!bash %"
     elseif &filetype == "go"
         exec "!gccgo -Wall %<.go -o %<"
         exec "! ./%<"
@@ -238,7 +235,9 @@ Bundle 'gmarik/vundle'
 
 
 " Python syntax check on the fly
-Bundle 'pyflakes.vim'
+if has("python")
+    Bundle 'pyflakes.vim'
+endif
 
 
 " Auto generate tags & scope files, for python, install pycsope==0.3
@@ -246,14 +245,16 @@ Bundle 'pyflakes.vim'
 " KEYS:
 "   <F4> (re)Generate tags&cscope.out
 "   <F3> Add addtional ctags file
-Bundle 'autotags'
-let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+p --fields=+ialS
-        \ --extra=+q"
-let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
-        \ .c .idl"
-au BufEnter *.py let g:autotags_no_global=1 | if executable('pycscope.py') |
-        \ let g:autotags_cscope_exe="pycscope.py -i cscope.files -- " | endif
-au BufLeave *.py let g:autotags_cscope_exe="cscope"
+if executable('cscope') && executable('ctags')
+    Bundle 'autotags'
+    let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+p --fields=+ialS
+            \ --extra=+q"
+    let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
+            \ .c .idl"
+    au BufEnter *.py let g:autotags_no_global=1 | if executable('pycscope.py') |
+            \ let g:autotags_cscope_exe="pycscope.py -i cscope.files -- " | endif
+    au BufLeave *.py let g:autotags_cscope_exe="cscope"
+endif
 
 
 " Cscope key mapping
@@ -266,14 +267,14 @@ Bundle 'steffanc/cscopemaps.vim'
 " Text Objects based on Indentation Level
 " KEYS:
 "   vai, vii, vaI
-Bundle 'vim-indent-object'
+"Bundle 'vim-indent-object'
 
 
 " Expand/shrink region in V mode
 " KEYS:
 "   + Expand region
 "   - Shrink region
-Bundle 'terryma/vim-expand-region'
+"Bundle 'terryma/vim-expand-region'
 
 
 " Pairs of handy bracket mappings
@@ -289,9 +290,9 @@ nnoremap cop :setlocal paste!<cr>
 
 
 " Toggle locationlist, quickfix: <leader>l|q
-Bundle 'Valloric/ListToggle'
-nnoremap coq :QToggle<CR>
-nnoremap coL :LToggle<CR>
+"Bundle 'Valloric/ListToggle'
+"nnoremap coq :QToggle<CR>
+"nnoremap coL :LToggle<CR>
 
 
 " Status line (replace vim-powerline)
@@ -315,6 +316,8 @@ Bundle 'echofunc.vim'
 "   :ls      List buffers
 Bundle 'buftabs'
 nnoremap <leader>bt :call Buftabs_show(-1)<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
 let g:buftabs_only_basename=1
 let g:buftabs_separator=" "
 
@@ -331,6 +334,17 @@ let g:AutoPairs={'[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
 "                               occurences
 "   :ReplaceUndo                Undoes the last :Replace operation
 Bundle 'EasyGrep'
+function! ToggleEasyGrepMode()
+    if g:EasyGrepMode == 2
+        let g:EasyGrepMode=0
+        echomsg "'All files' mode on"
+    else
+        let g:EasyGrepMode=2
+        echomsg "'Track extension' mode on"
+    endif
+endfunction
+nnoremap coe :call ToggleEasyGrepMode()<CR>
+let g:EasyGrepMode=2  " 0 - All files, 1 - Bufrers, 2 - Track extension
 
 
 " Fuzzy file, buffer, mru, tag, etc finder
@@ -351,6 +365,13 @@ let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
 Bundle 'scrooloose/nerdcommenter'
 
 
+" Simplify Doxygen documentation in C, C++, Python
+Bundle 'DoxygenToolkit.vim'
+nnoremap <leader>do :Dox<CR>
+nnoremap <leader>da :DoxAuthor<CR>
+nnoremap <leader>db :DoxBlock<CR>
+
+
 " A tree explorer plugin for navigating the filesystem
 Bundle 'scrooloose/nerdtree'
 nnoremap <leader>nt :NERDTreeToggle<CR>
@@ -366,6 +387,13 @@ au filetype python,java,c,cpp silent! nested :TagbarOpen
 " Perform all your vim insert mode completions with Tab
 Bundle 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType=""
+
+
+" Smart Space key for Vim
+" KEYS:
+"   <SPACE>        A clever key to repeat motions
+"   <S-SPACE>/<BS> Inverse <SPACE>
+Bundle 'spiiph/vim-space'
 
 
 " Ultimate auto-completion system
@@ -397,11 +425,11 @@ endif
 
 if has("conceal")
     " Display the indention levels with thin vertical lines
-    Bundle 'Yggdroot/indentLine'
-    nnoremap <leader>il :IndentLinesToggle<CR>
+    "Bundle 'Yggdroot/indentLine'
+    "nnoremap <leader>il :IndentLinesToggle<CR>
     " NOTE: too slow when file lines > 2K
-    let g:indentLine_fileType=['python', 'java', 'h', 'c', 'cpp']
-    let g:indentLine_enabled=0
+    "let g:indentLine_fileType=['python', 'java', 'h', 'c', 'cpp']
+    "let g:indentLine_enabled=0
 endif
 
 
