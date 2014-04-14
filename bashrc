@@ -133,6 +133,9 @@ if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$SSH_SOCK" ] ; then
     export SSH_AUTH_SOCK=$SSH_SOCK
 fi
 
+# tmux encoding issue, see http://popozhu.github.io/2013/11/06/tmux%EF%BC%8C%E4%B9%B1%E7%A0%81%E5%B7%B2%E6%88%90%E5%BE%80%E4%BA%8B/
+export LC_ALL="zh_CN.UTF-8"
+
 # auto open tmux
 if which tmux 2>&1 >/dev/null; then
     tm () {
