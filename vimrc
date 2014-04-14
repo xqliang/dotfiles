@@ -108,10 +108,9 @@ au BufReadPost * exe "normal! g`\""
 " Custom key mappings
 let mapleader=","
 nnoremap ; :
-cnoremap ;; <C-U><Esc>
+cnoremap jj <C-U><Esc>
 " Quickly get out of insert mode without your fingers having to leave the
 " home row, equals to <ESC>,<C-C>,<C-[>
-inoremap ;; <Esc>
 inoremap jj <Esc>
 inoremap jw <Esc>:w<CR>a
 " Quickly Esc, save file, close file and reload vimrc
@@ -222,6 +221,18 @@ map <F5> :call CompileRun()<CR>
 "
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
+
+" Auto setting up Vundle
+" see http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+let iCanHazVundle=1
+let vundleReadme=expand('~/.vim/bundle/vundle/README.md')
+if !filereadable(vundleReadme)
+    echo "Installing Vundle..."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let iCanHazVundle=0
+endif
 
 set nocompatible              " be iMproved
 filetype off                  " required!
@@ -444,3 +455,9 @@ endif
 
 
 filetype plugin indent on     " required!
+
+if iCanHazVundle == 0
+    echo "Installing Bundles, please ignore key map error messages"
+    echo ""
+    :BundleInstall
+endif
