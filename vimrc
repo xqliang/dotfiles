@@ -386,6 +386,7 @@ nnoremap <leader>db :DoxBlock<CR>
 " A tree explorer plugin for navigating the filesystem
 Bundle 'scrooloose/nerdtree'
 nnoremap <leader>nt :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
 
 
 " Displays tags in a window, ordered by class etc (replace taglist.vim)
