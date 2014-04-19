@@ -6,3 +6,6 @@
 	st = status
 	last = log -1 HEAD
 	unstage = reset HEAD --
+[user]
+	name = xqliang
+	email = qingliangxiong@gmail.com
