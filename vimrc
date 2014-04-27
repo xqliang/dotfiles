@@ -70,8 +70,8 @@ set noexpandtab
 set foldmethod=syntax
 set foldlevel=100        " Do not fold when open file
 set foldcolumn=0         " No fold column
-set nonumber
-set nolist listchars=tab:»\ ,trail:-,extends:>
+"set nonumber nolist
+set listchars=tab:»\ ,trail:-,extends:>
 set scrolloff=3          " Keep more context when scrolling off the end of a buffer
 set shiftwidth=4
 set smartindent
@@ -97,9 +97,9 @@ syntax enable
 filetype plugin on
 
 " Hilight text over length (set colorcolumn=80)
-au BufEnter *.py,*.c,*.cpp,*.h silent! set colorcolumn=80
-au filetype python,java,javascript,css setlocal number
-au filetype vim,python,java,rst,ruby,javascript,css setlocal list
+au BufEnter *.py,*.c,*.cpp,*.h,*.java silent! setlocal colorcolumn=80
+au filetype python,c,cpp,h,java,javascript,css setlocal number
+au filetype vim,python,c,cpp,h,java,rst,ruby,javascript,css setlocal list
 
 " Have Vim jump to the last position when reopening a file
 au BufReadPost * exe "normal! g`\""
@@ -136,6 +136,28 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 nnoremap <C-_> <C-W>_
+
+function! IsMostWin(dir)
+    let old = winnr()
+    if a:dir == "left"
+        silent! exe "normal! \<c-w>h"
+    elseif a:dir == "right"
+        silent! exe "normal! \<c-w>l"
+    elseif a:dir == "top"
+        silent! exe "normal! \<c-w>k"
+    elseif a:dir == "bottom"
+        silent! exe "normal! \<c-w>j"
+    endif
+    let new = winnr()
+    silent! exe old.'wincmd w'
+    return old == new
+endfunction
+
+" Resize window
+nnoremap <C-W><C-J> :exe ":res ".(IsMostWin('bottom')?'-':'+').5<CR>
+nnoremap <C-W><C-K> :exe ":res ".(IsMostWin('bottom')?'+':'-').5<CR>
+nnoremap <C-W><C-L> :exe ":vertical res ".(IsMostWin('right')?'-':'+').5<CR>
+nnoremap <C-W><C-H> :exe ":vertical res ".(IsMostWin('right')?'+':'-').5<CR>
 
 " Bash like keys for the command line
 cnoremap <C-A> <Home>
@@ -176,8 +198,12 @@ func! CompileRun()
         exec "!g++ % -g -o %<.exe"
         exec "!./%<.exe"
     elseif &filetype == "java"
-        exec "!javac %"
-        exec "!java %<"
+        if exists(":Vjdec")
+            exec ":Vjdec"
+        else
+            exec ":Javac %"
+            exec ":Java %<"
+        endif
     elseif &filetype == "ruby"
         exec "!ruby %<.rb"
     elseif &filetype == "haskell"
@@ -251,6 +277,33 @@ if has("python")
 endif
 
 
+Bundle 'vim-scripts/Vim-JDE'
+set omnifunc=VjdeCompletionFun
+" Make sure console message in english
+let $LANG='en_US'
+language messages en_US.UTF-8
+let g:vjde_java_exception='\(unreported exception \)\([^ \t;]*\);'
+if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
+" KEYS:
+"   :Vjdec     Do compile
+"   :Vjdei     Goto definition
+"   :Vjdegd    Goto declaration
+"   <leader>ai Add import under cursor
+"   <leader>oe Extend some methods of class
+"   <leader>oi Implements some interface of current class
+"   <leader>fr Fix compiler errors with throws statement.
+"   <leader>ft Fix compiler errors with try-catch statement
+"   <leader>jc Generate constructor of class with all members.
+"   <leader>jt Surround line with try-catch statement
+"   <leader>jd Read the document of symbol that under cursor.
+"   <leader>jg Generate getter-setter of current member.
+"   <leader>je Add import for current line,it used for this line
+
+Bundle 'file:///home/xqliang/work/vim-classpath'
+"inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
+"noremap <buffer> <C-S-Space> <C-X><C-U><C-P>
+
+
 " Auto generate tags & scope files, for python, install pycsope==0.3
 "   $ sudo pip install pycscope==0.3
 " KEYS:
@@ -258,7 +311,7 @@ endif
 "   <F3> Add addtional ctags file
 if executable('cscope') && executable('ctags')
     Bundle 'autotags'
-    let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+p --fields=+ialS
+    let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+px --fields=+ialS
             \ --extra=+q"
     let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
             \ .c .idl"
@@ -301,9 +354,9 @@ nnoremap cop :setlocal paste!<cr>
 
 
 " Toggle locationlist, quickfix: <leader>l|q
-"Bundle 'Valloric/ListToggle'
-"nnoremap coq :QToggle<CR>
-"nnoremap coL :LToggle<CR>
+Bundle 'Valloric/ListToggle'
+nnoremap coq :QToggle<CR>
+nnoremap coL :LToggle<CR>
 
 
 " Status line (replace vim-powerline)
@@ -385,15 +438,19 @@ nnoremap <leader>db :DoxBlock<CR>
 
 " A tree explorer plugin for navigating the filesystem
 Bundle 'scrooloose/nerdtree'
-nnoremap <leader>nt :NERDTreeToggle<CR>
+map <F2> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
+" Open a NERDTree automatically when vim starts up if no files were specified
+autocmd vimenter * if !argc() | NERDTree | endif
+" Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
 " Displays tags in a window, ordered by class etc (replace taglist.vim)
-Bundle 'Tagbar'
-nnoremap <leader>tb :TagbarToggle<CR>
-let g:tagbar_width=30
-au filetype python,java,c,cpp silent! nested :TagbarOpen
+"Bundle 'Tagbar'
+"nnoremap <leader>tb :TagbarToggle<CR>
+"let g:tagbar_width=30
+"au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
 " Perform all your vim insert mode completions with Tab
@@ -405,7 +462,7 @@ let g:SuperTabDefaultCompletionType=""
 " KEYS:
 "   <SPACE>        A clever key to repeat motions
 "   <S-SPACE>/<BS> Inverse <SPACE>
-Bundle 'spiiph/vim-space'
+"Bundle 'spiiph/vim-space'
 
 
 " Ultimate auto-completion system
