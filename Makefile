@@ -1,5 +1,5 @@
 init:
-	@for f in vimrc tmux.conf pythonstartup bashrc gitconfig; do \
+	@for f in vimrc tmux.conf pythonstartup bashrc gitconfig profile; do \
 		if [ -f ~/.$$f ]; then \
 			if [ ! -L ~/.$$f ]; then \
 				echo "backup old file: mv ~/.$$f ~/.$$f.`date +%Y%m%d%H%M%S`.bak"; \

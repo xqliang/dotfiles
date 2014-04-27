@@ -1,0 +1,47 @@
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ]; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+if [ -f "$HOME/.z.sh" ]; then
+    . "$HOME/.z.sh"
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+	if [ -f /usr/bin/javac ]; then
+		export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
+	else
+		export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")
+	fi
+	export PATH=$PATH:$JAVA_HOME/bin
+	if [ -z $CLASSPATH ]; then
+		CLASSPATH=$JAVA_HOME/lib/dt.jar
+	else
+		CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/dt.jar
+	fi
+	if [ -f $JAVA_HOME/lib/tools.jar ]; then
+		CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/tools.jar
+	fi
+	if [[ ! "$CLASSPATH" =~ ^\.:|:\.:? ]]; then
+		CLASSPATH=.:$CLASSPATH
+	fi
+	export CLASSPATH
+fi
