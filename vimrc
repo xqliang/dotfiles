@@ -189,45 +189,48 @@ nnoremap F :call DictTranslate()<CR>
 
 " Run
 set makeprg=g++\ -Wall\ -o\ %<.exe\ %
-func! CompileRun()
+func! Compile()
     exec "w"
     if &filetype == "c"
         exec "!gcc % -g -o %<.exe"
-        exec "!./%<.exe"
     elseif &filetype == "cpp"
         exec "!g++ % -g -o %<.exe"
-        exec "!./%<.exe"
     elseif &filetype == "java"
         if exists(":Vjdec")
             exec ":Vjdec"
-        else
+        elseif exists(":Javac")
             exec ":Javac %"
-            exec ":Java %<"
+        else
+            exec "!javac %"
         endif
-    elseif &filetype == "ruby"
-        exec "!ruby %<.rb"
-    elseif &filetype == "haskell"
-        exec "!ghc --make %<.hs -o %<"
-        exec "! %<.exe"
-    elseif &filetype == "perl"
-        exec "!perl %<.pl"
     elseif &filetype == "python"
-        exec "!python %<.py"
-    elseif &filetype == "lua"
-        exec "!lua %<.lua"
+        exec "!pycompile %<.py"
     elseif &filetype == "sh"
         exec "!bash %"
-    elseif &filetype == "go"
-        exec "!gccgo -Wall %<.go -o %<"
-        exec "! ./%<"
-    elseif &filetype == "make"
-        exec "!colormake"
-        exec "! ./app"
-    elseif &filetype == "io"
-        exec "!io %<.io"
     endif
 endfunc
-map <F5> :call CompileRun()<CR>
+
+func! Run()
+    if &filetype == "c"
+        exec "!./%<.exe"
+    elseif &filetype == "cpp"
+        exec "!./%<.exe"
+    elseif &filetype == "java"
+        if exists(":Vjder")
+            exec ":Vjder"
+        elseif exists(":Java")
+            exec ":Java %<"
+        else
+            exec "!java %<"
+        endif
+    elseif &filetype == "python"
+        exec "!python %<.py"
+    elseif &filetype == "sh"
+        exec "!bash %"
+    endif
+endfunc
+map <F5> :call Compile()<CR>
+map <F6> :call Run()<CR>
 
 
 " Vundle
@@ -277,7 +280,7 @@ if has("python")
 endif
 
 
-Bundle 'vim-scripts/Vim-JDE'
+Bundle 'xqliang/Vim-JDE'
 set omnifunc=VjdeCompletionFun
 " Make sure console message in english
 let $LANG='en_US'
@@ -299,7 +302,7 @@ if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
 "   <leader>jg Generate getter-setter of current member.
 "   <leader>je Add import for current line,it used for this line
 
-Bundle 'file:///home/xqliang/work/vim-classpath'
+Bundle 'xqliang/vim-classpath'
 "inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
 "noremap <buffer> <C-S-Space> <C-X><C-U><C-P>
 
