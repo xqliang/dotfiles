@@ -21,8 +21,8 @@ if [ -d "$HOME/bin" ]; then
     PATH="$HOME/bin:$PATH"
 fi
 
-if [ -f "$HOME/.z.sh" ]; then
-    . "$HOME/.z.sh"
+if [ -f "$HOME/bin/z.sh" ]; then
+    . "$HOME/bin/z.sh"
 fi
 
 if [ -z "$JAVA_HOME" ]; then
@@ -45,3 +45,7 @@ if [ -z "$JAVA_HOME" ]; then
 	fi
 	export CLASSPATH
 fi
+
+export GREP_OPTIONS="--color=auto --exclude-dir=\.svn --exclude=*.pyc --exclude=tags"
+export LANG=zh_CN.UTF8
+export LC_MESSAGES=en_US.UTF8
