@@ -280,6 +280,12 @@ if has("python")
 endif
 
 
+" Automatically detect indent (expandtab, shiftwidth, tabstop) settings
+Bundle 'roryokane/detectindent'
+let g:detectindent_preferred_indent=4
+autocmd BufReadPost * :DetectIndent
+
+
 Bundle 'scrooloose/syntastic.git'
 
 
