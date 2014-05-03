@@ -286,6 +286,7 @@ let g:detectindent_preferred_indent=4
 autocmd BufReadPost * :DetectIndent
 
 
+" Syntax checking hacks for vim
 Bundle 'scrooloose/syntastic.git'
 
 
@@ -312,9 +313,8 @@ if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
 "   <leader>je Add import for current line,it used for this line
 
 
+" Set 'path' from the Java/VIM-JDE class path
 Bundle 'xqliang/vim-classpath'
-"inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
-"noremap <buffer> <C-S-Space> <C-X><C-U><C-P>
 
 
 " Auto generate tags & scope files, for python, install pycsope==0.3
@@ -397,16 +397,16 @@ let g:airline_section_z='%2p%% %2l:%-2c'
 
 
 " Insert or delete brackets, parens, quotes in pair
-"
-" KEYS:
-"   <C-R><C-R><C-\> List all snippets
-"   xxx<C-\>        Show xxx snippet, use <Tab>/<S-Tab> for navigation
 Bundle 'xqliang/Auto-Pairs'
 " Confict when xptemplate restore <CR> mapping, so disable it
 let g:AutoPairsMapCR=0
 
 
 " eXcellent code sniPPet Template engine for vim
+"
+" KEYS:
+"   <C-R><C-R><C-\> List all snippets
+"   xxx<C-\>        Show xxx snippet, use <Tab>/<S-Tab> for navigation
 Bundle 'drmingdrmer/xptemplate'
 
 
@@ -494,6 +494,12 @@ silent! colorscheme molokai
 
 if v:version >= 704 || (v:version == 703 && has("patch584"))
     " A code-completion engine (repalce SuperTab & neocomplcache)
+    "
+    " INSTALL:
+    "   see https://github.com/Valloric/YouCompleteMe
+    "
+    " NOTE:
+    "   cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
     Bundle 'Valloric/YouCompleteMe'
     "set g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
     "set g:ycm_extra_conf_globlist=[]
