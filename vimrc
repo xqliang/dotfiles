@@ -282,7 +282,6 @@ endif
 
 " Automatically detect indent (expandtab, shiftwidth, tabstop) settings
 Bundle 'roryokane/detectindent'
-let g:detectindent_preferred_indent=4
 autocmd BufReadPost * :DetectIndent
 
 
