@@ -264,7 +264,7 @@ if !filereadable(vundleReadme)
 endif
 
 set nocompatible              " be iMproved
-filetype off                  " required!
+"filetype off                  " required!
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -278,6 +278,9 @@ Bundle 'gmarik/vundle'
 if has("python")
     Bundle 'pyflakes.vim'
 endif
+
+
+Bundle 'scrooloose/syntastic.git'
 
 
 Bundle 'xqliang/Vim-JDE'
@@ -301,6 +304,7 @@ if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
 "   <leader>jd Read the document of symbol that under cursor.
 "   <leader>jg Generate getter-setter of current member.
 "   <leader>je Add import for current line,it used for this line
+
 
 Bundle 'xqliang/vim-classpath'
 "inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
@@ -371,28 +375,48 @@ let g:airline_right_sep=''
 let g:airline_section_z='%2p%% %2l:%-2c'
 
 
-" Show function prototype in command line when type '('
-Bundle 'echofunc.vim'
-
-
 " Show buffers in command line when open/write file
+"
 " KEYS:
 "   {n}<c-^> n'th buffer
 "   <c-^>    Prev buffer
 "   :e#      Next buffer
 "   :ls      List buffers
-Bundle 'buftabs'
-nnoremap <leader>bt :call Buftabs_show(-1)<CR>
-nnoremap <leader>bp :bp<CR>
-nnoremap <leader>bn :bn<CR>
-let g:buftabs_only_basename=1
-let g:buftabs_separator=" "
+"Bundle 'buftabs'
+"nnoremap <leader>bt :call Buftabs_show(-1)<CR>
+"nnoremap <leader>bp :bp<CR>
+"nnoremap <leader>bn :bn<CR>
+"let g:buftabs_only_basename=1
+"let g:buftabs_separator=" "
 
 
 " Insert or delete brackets, parens, quotes in pair
-Bundle 'jiangmiao/auto-pairs'
-" NOTE: Not auto pair (, because it shadow the echofunc
-let g:AutoPairs={'[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
+"
+" KEYS:
+"   <C-R><C-R><C-\> List all snippets
+"   xxx<C-\>        Show xxx snippet, use <Tab>/<S-Tab> for navigation
+Bundle 'xqliang/Auto-Pairs'
+" Confict when xptemplate restore <CR> mapping, so disable it
+let g:AutoPairsMapCR=0
+
+
+" eXcellent code sniPPet Template engine for vim
+Bundle 'drmingdrmer/xptemplate'
+
+
+" Provides mappings to easily delete, change and add such surroundings in pairs
+" KEYS:
+"  ds  - delete a surrounding, e.g. ds"
+"  cs  - change a surrounding, e.g. cs"', csw), cst<p>
+"  ys  - add a surrounding, e.g. ysiw", ys", ysiwt<a>
+"  yS  - add a surrounding and place the surrounded text on a new line + indent it
+"  yss - add a surrounding to the whole line
+"  ySs/ySS  - add a surrounding to the whole line, place it on a new line + indent it
+Bundle 'tpope/vim-surround'
+
+
+" Extended % matching for HTML, LaTeX, and many other languages
+Bundle 'tmhedberg/matchit'
 
 
 " Fast and Easy Find and Replace Across Multiple Files
@@ -433,10 +457,10 @@ Bundle 'scrooloose/nerdcommenter'
 
 
 " Simplify Doxygen documentation in C, C++, Python
-Bundle 'DoxygenToolkit.vim'
-nnoremap <leader>do :Dox<CR>
-nnoremap <leader>da :DoxAuthor<CR>
-nnoremap <leader>db :DoxBlock<CR>
+"Bundle 'DoxygenToolkit.vim'
+"nnoremap <leader>do :Dox<CR>
+"nnoremap <leader>da :DoxAuthor<CR>
+"nnoremap <leader>db :DoxBlock<CR>
 
 
 " A tree explorer plugin for navigating the filesystem
@@ -444,9 +468,9 @@ Bundle 'scrooloose/nerdtree'
 map <F2> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
 " Open a NERDTree automatically when vim starts up if no files were specified
-autocmd vimenter * if !argc() | NERDTree | endif
+autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
 " Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q! | endif
 
 
 " Displays tags in a window, ordered by class etc (replace taglist.vim)
@@ -456,43 +480,64 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
-" Perform all your vim insert mode completions with Tab
-Bundle 'ervandew/supertab'
-let g:SuperTabDefaultCompletionType=""
-
-
-" Smart Space key for Vim
-" KEYS:
-"   <SPACE>        A clever key to repeat motions
-"   <S-SPACE>/<BS> Inverse <SPACE>
-"Bundle 'spiiph/vim-space'
-
-
-" Ultimate auto-completion system
-Bundle 'Shougo/neocomplcache.vim'
-let g:neocomplcache_enable_at_startup=1
-let g:neocomplcache_disable_auto_complete=1
-
-
 " Molokai color scheme
 Bundle 'molokai'
 silent! colorscheme desert
 silent! colorscheme molokai
 
 
-if v:version >= 703
+if v:version >= 704 || (v:version == 703 && has("patch584"))
     " A code-completion engine (repalce SuperTab & neocomplcache)
-    "Bundle 'Valloric/YouCompleteMe'
+    Bundle 'Valloric/YouCompleteMe'
     "set g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
     "set g:ycm_extra_conf_globlist=[]
     "set g:ycm_min_num_of_chars_for_completion=1
-    "noremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+    noremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+else
+    " Perform all your vim insert mode completions with Tab
+    Bundle 'ervandew/supertab'
+    let g:SuperTabDefaultCompletionType=""
 
-    " Zoom in/out of windows
+
+    " Ultimate auto-completion system
+    Bundle 'Shougo/neocomplcache.vim'
+    let g:neocomplcache_enable_at_startup=1
+    let g:neocomplcache_disable_auto_complete=1
+
+
+    " Awesome Python autocompletion with VIM
+    "
+    " INSTALL:
+    "   $ sudo pip install jedi
+    "
     " KEYS:
-    "   <C-W>o Toggle window size
-    Bundle 'ZoomWin'
+    "   <leader>g Goto assignments (typical goto function)
+    "   <leader>d Goto definitions (includes imports and statements)
+    "   <leader>r Renaming
+    "   <leader>n Shows all the usages of a name
+    "   <C-\>     Completion
+    "   K         Show Documentation/Pydoc
+    "Bundle 'davidhalter/jedi-vim'
+    "let g:jedi#completions_command = "<C-\>"
+    "let g:jedi#completions_enabled = 1
+
+
+    " Show function prototype in command line when type '('
+    "Bundle 'echofunc.vim'
+
+
+    " Smart Space key for Vim
+    " KEYS:
+    "   <SPACE>        A clever key to repeat motions
+    "   <S-SPACE>/<BS> Inverse <SPACE>
+    "Bundle 'spiiph/vim-space'
 endif
+
+
+" Zoom in/out of windows
+" KEYS:
+"   <C-W>o Toggle window size
+Bundle 'regedarek/ZoomWin'
 
 
 if has("conceal")
@@ -507,10 +552,7 @@ endif
 
 " Other maybe useful plugins
 "Bundle 'Mark'
-"Bundle 'matchit.zip'
 "Bundle 'python_match.vim'
-"Bundle 'scrooloose/syntastic.git'
-"Bundle 'surround.vim'
 "Bundle 'TxtBrowser'
 "Bundle 'YankRing.vim'
 
