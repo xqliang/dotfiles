@@ -217,7 +217,7 @@ func! Run()
         exec "!./%<.exe"
     elseif &filetype == "java"
         if exists(":Vjder")
-            exec ":Vjder"
+            exec ":Vjder %<"
         elseif exists(":Java")
             exec ":Java %<"
         else
@@ -282,7 +282,7 @@ endif
 
 " Automatically detect indent (expandtab, shiftwidth, tabstop) settings
 Bundle 'roryokane/detectindent'
-autocmd BufReadPost * :DetectIndent
+autocmd BufReadPost * if exists(":DetectIndent") | :DetectIndent | endif
 
 
 " Syntax checking hacks for vim
