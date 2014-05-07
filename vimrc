@@ -321,12 +321,12 @@ Bundle 'xqliang/vim-classpath'
 " KEYS:
 "   <F4> (re)Generate tags&cscope.out
 "   <F3> Add addtional ctags file
-if executable('cscope') && executable('ctags')
-    Bundle 'autotags'
+if executable('cscope') && executable('ctags') && executable('md5sum')
+    Bundle 'basilgor/vim-autotags'
     let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+px --fields=+ialS
             \ --extra=+q"
     let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
-            \ .c .idl"
+            \ .c .idl .java"
     au BufEnter *.py let g:autotags_no_global=1 | if executable('pycscope.py') |
             \ let g:autotags_cscope_exe="pycscope.py -i cscope.files -- " | endif
     au BufLeave *.py let g:autotags_cscope_exe="cscope"
