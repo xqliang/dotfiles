@@ -157,10 +157,10 @@ function! IsMostWin(dir)
 endfunction
 
 " Resize window
-nnoremap <C-W><C-J> :exe ":res ".(IsMostWin('bottom')?'-':'+').5<CR>
-nnoremap <C-W><C-K> :exe ":res ".(IsMostWin('bottom')?'+':'-').5<CR>
-nnoremap <C-W><C-L> :exe ":vertical res ".(IsMostWin('right')?'-':'+').5<CR>
-nnoremap <C-W><C-H> :exe ":vertical res ".(IsMostWin('right')?'+':'-').5<CR>
+nnoremap <silent> <C-W><C-J> :exe ":res ".(IsMostWin('bottom')?'-':'+').5<CR>
+nnoremap <silent> <C-W><C-K> :exe ":res ".(IsMostWin('bottom')?'+':'-').5<CR>
+nnoremap <silent> <C-W><C-L> :exe ":vertical res ".(IsMostWin('right')?'-':'+').5<CR>
+nnoremap <silent> <C-W><C-H> :exe ":vertical res ".(IsMostWin('right')?'+':'-').5<CR>
 
 " Bash like keys for the command line
 cnoremap <C-A> <Home>
