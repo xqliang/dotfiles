@@ -20,6 +20,9 @@ call MakeDir($HOME . '/.vim/backup')
 call MakeDir($HOME . '/.vim/swap')
 
 set nocompatible
+" Prevent vim from trying to connect to the X server, it cause vim startup
+" too slow in tmux. (vim --startuptime log; cat log | sort -k 2 | tail)
+set clipboard=autoselect,exclude:cons\\\|linux\\\|screen\\\|rxvt\\\|cygwin
 set backup writebackup
 set backupdir=$HOME/.vim/backup " Where to put backup file
 set directory=$HOME/.vim/swap   " Where to put swap file
