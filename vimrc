@@ -429,18 +429,18 @@ Bundle 'tmhedberg/matchit'
 "   <leader>{vv|vV|va|vA|vr|vo} Grep for the word under the cursor, match all
 "                               occurences
 "   :ReplaceUndo                Undoes the last :Replace operation
-Bundle 'EasyGrep'
-function! ToggleEasyGrepMode()
-    if g:EasyGrepMode == 2
-        let g:EasyGrepMode=0
-        echomsg "'All files' mode on"
-    else
-        let g:EasyGrepMode=2
-        echomsg "'Track extension' mode on"
-    endif
-endfunction
-nnoremap coe :call ToggleEasyGrepMode()<CR>
-let g:EasyGrepMode=2  " 0 - All files, 1 - Bufrers, 2 - Track extension
+"Bundle 'EasyGrep'
+"function! ToggleEasyGrepMode()
+"    if g:EasyGrepMode == 2
+"        let g:EasyGrepMode=0
+"        echomsg "'All files' mode on"
+"    else
+"        let g:EasyGrepMode=2
+"        echomsg "'Track extension' mode on"
+"    endif
+"endfunction
+"nnoremap coe :call ToggleEasyGrepMode()<CR>
+"let g:EasyGrepMode=2  " 0 - All files, 1 - Bufrers, 2 - Track extension
 
 
 " Fuzzy file, buffer, mru, tag, etc finder
@@ -499,10 +499,15 @@ if v:version >= 704 || (v:version == 703 && has("patch584"))
     "
     " NOTE:
     "   cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+    "
+    " KEYS:
+    "   <leader>g   Goto definition or declaration
+    "   <C-O>/<C-I> Jump back or forward
     Bundle 'Valloric/YouCompleteMe'
     "set g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
-    "set g:ycm_extra_conf_globlist=[]
-    "set g:ycm_min_num_of_chars_for_completion=1
+    let g:ycm_complete_in_comments=1
+    let g:ycm_collect_identifiers_from_comments_and_strings=0
+    let g:ycm_collect_identifiers_from_tags_files=0
     noremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 else
     " Perform all your vim insert mode completions with Tab
