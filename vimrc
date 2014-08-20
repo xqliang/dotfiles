@@ -260,6 +260,9 @@ map <F6> :call Run()<CR>
 let iCanHazVundle=1
 let vundleReadme=expand('~/.vim/bundle/vundle/README.md')
 if !filereadable(vundleReadme)
+    if !exists('git')
+        finish
+    endif"
     echo "Installing Vundle..."
     echo ""
     silent !mkdir -p ~/.vim/bundle
