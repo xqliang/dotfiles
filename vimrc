@@ -269,6 +269,7 @@ endif
 set nocompatible              " be iMproved
 "filetype off                  " required!
 
+
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
@@ -284,8 +285,8 @@ endif
 
 
 " Automatically detect indent (expandtab, shiftwidth, tabstop) settings
-Bundle 'roryokane/detectindent'
-autocmd BufReadPost * if exists(":DetectIndent") | :DetectIndent | endif
+"Bundle 'roryokane/detectindent'
+"autocmd BufReadPost * if exists(":DetectIndent") | :DetectIndent | endif
 
 
 " Syntax checking hacks for vim
@@ -488,6 +489,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
+Bundle 'taglist.vim'
+nnoremap <F7> :TlistToggle<CR>
+let Tlist_Use_Right_Window=1
+
+
 " Molokai color scheme
 Bundle 'molokai'
 silent! colorscheme desert
@@ -509,8 +515,8 @@ if v:version >= 704 || (v:version == 703 && has("patch584"))
     Bundle 'Valloric/YouCompleteMe'
     "set g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
     let g:ycm_complete_in_comments=1
-    let g:ycm_collect_identifiers_from_comments_and_strings=0
-    let g:ycm_collect_identifiers_from_tags_files=0
+    let g:ycm_collect_identifiers_from_comments_and_strings=1
+    let g:ycm_collect_identifiers_from_tags_files=1
     noremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 else
     " Perform all your vim insert mode completions with Tab
