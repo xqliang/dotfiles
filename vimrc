@@ -20,6 +20,7 @@ call MakeDir($HOME . '/.vim/backup')
 call MakeDir($HOME . '/.vim/swap')
 
 set nocompatible
+set modelines=5  " System vimrc shipped with OSX sets the modelines variable to 0
 " Prevent vim from trying to connect to the X server, it cause vim startup
 " too slow in tmux. (vim --startuptime log; cat log | sort -k 2 | tail)
 set clipboard=autoselect,exclude:cons\\\|linux\\\|screen\\\|rxvt\\\|cygwin
@@ -589,3 +590,5 @@ if iCanHazVundle == 0
     echo ""
     :BundleInstall
 endif
+
+" vim: et tw=4 sw=4
