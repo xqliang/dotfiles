@@ -26,24 +26,22 @@ if [ -f "$HOME/bin/z.sh" ]; then
 fi
 
 if [ -z "$JAVA_HOME" ]; then
-	if [ -f /usr/bin/javac ]; then
-		export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
-	else
+	if [ -f /usr/bin/java ]; then
 		export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:/bin/java::")
+		export PATH=$PATH:$JAVA_HOME/bin
+		if [ -z $CLASSPATH ]; then
+			CLASSPATH=$JAVA_HOME/lib/dt.jar
+		else
+			CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/dt.jar
+		fi
+		if [ -f $JAVA_HOME/lib/tools.jar ]; then
+			CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/tools.jar
+		fi
+		if [[ ! "$CLASSPATH" =~ ^\.:|:\.:? ]]; then
+			CLASSPATH=.:$CLASSPATH
+		fi
+		export CLASSPATH
 	fi
-	export PATH=$PATH:$JAVA_HOME/bin
-	if [ -z $CLASSPATH ]; then
-		CLASSPATH=$JAVA_HOME/lib/dt.jar
-	else
-		CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/dt.jar
-	fi
-	if [ -f $JAVA_HOME/lib/tools.jar ]; then
-		CLASSPATH=$CLASSPATH:$JAVA_HOME/lib/tools.jar
-	fi
-	if [[ ! "$CLASSPATH" =~ ^\.:|:\.:? ]]; then
-		CLASSPATH=.:$CLASSPATH
-	fi
-	export CLASSPATH
 fi
 
 export GREP_OPTIONS="--color=auto --exclude-dir=\.svn --exclude=*.pyc --exclude=tags"
