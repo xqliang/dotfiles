@@ -98,11 +98,13 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-# sudo pip install virtualenv virtualenvwrapper
-# mkdir $HOME/.virtualenvs
-export VIRTUALENV_DISTRIBUTE=true
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+    # sudo pip install virtualenv virtualenvwrapper
+    # mkdir $HOME/.virtualenvs
+    export VIRTUALENV_DISTRIBUTE=true
+    export WORKON_HOME=$HOME/.virtualenvs
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
 
 export PYTHONSTARTUP=~/.pythonstartup
 # see http://www.shallowsky.com/linux/noaltscreen.html
@@ -151,6 +153,6 @@ if which tmux 2>&1 >/dev/null; then
     }
     #export DISABLE_AUTO_TITLE=true
     export tm
-	tm
+	#tm
 fi
 
