@@ -6,7 +6,7 @@ install:
 		if [ -f ~/.$$f ]; then \
 			if [ ! -L ~/.$$f ]; then \
 				if [ -f ~/.$$f.dotfiles.bak ]; then \
-					echo "exsits backup file: ~/.$$f.dotfiles.bak"; \
+					echo "ignore exsits backup file: ~/.$$f.dotfiles.bak"; \
 				else \
 					echo "backup old file: mv ~/.$$f{,.dotfiles.bak}"; \
 					mv ~/.$$f{,.dotfiles.bak}; \
@@ -14,8 +14,8 @@ install:
 			else \
 				oldlink="`readlink ~/.$$f`"; \
 				if [ "$$oldlink" != "`pwd`/$$f" ]; then \
-					echo "remove old link: rm ~/.$$f (-> $$oldlink)"; \
-					rm ~/.$$f; \
+					echo "backup old link: mv ~/.$$f{,.dotfiles.bak}"; \
+					mv ~/.$$f{,.dotfiles.bak}; \
 				else \
 					echo "exists link: ~/.$$f -> `pwd`/$$f"; \
 				fi; \
@@ -32,7 +32,7 @@ uninstall:
 	for f in $$(ls); do \
 		if [ -L ~/.$$f ]; then \
 			if [ -f ~/.$$f.dotfiles.bak ]; then \
-				echo "restore old file: mv ~/.$$f{.dotfiles.bak,}"; \
+				echo "restore old file/link: mv ~/.$$f{.dotfiles.bak,}"; \
 				mv ~/.$$f{.dotfiles.bak,}; \
 			else \
 				echo "remove link: rm ~/.$$f"; \
