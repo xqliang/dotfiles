@@ -3,6 +3,7 @@
 	ci = commit
 	co = checkout
 	di = diff
+	dc = diff --cached
 	st = status
 	last = log -1 HEAD
 	unstage = reset HEAD --
