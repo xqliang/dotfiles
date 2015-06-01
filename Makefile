@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := install
 
+deps:
+	@sudo apt-get install -y exuberant-ctags; sudo pip install pycscope==0.3
+
 install:
 	@cd dotfiles; \
 	for f in $$(ls); do \
