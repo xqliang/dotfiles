@@ -1,7 +1,10 @@
-.DEFAULT_GOAL := install
+.DEFAULT_GOAL := help
+
+help:
+	@echo "Usage: make {install|uninstall|deps|help}"
 
 deps:
-	@sudo apt-get install -y exuberant-ctags; sudo pip install pycscope==0.3
+	@sudo apt-get install -y exuberant-ctags tmux; sudo pip install pycscope==0.3
 
 install:
 	@cd dotfiles; \
