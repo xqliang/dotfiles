@@ -137,7 +137,7 @@ ssh() {
 # see http://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
 SSH_SOCK=/tmp/ssh-agent-$USER
 if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$SSH_SOCK" ] ; then
-	rm -f $SSH_SOCK
+    rm -f $SSH_SOCK
     ln -sf $SSH_AUTH_SOCK $SSH_SOCK
     export SSH_AUTH_SOCK=$SSH_SOCK
 fi
@@ -148,11 +148,16 @@ export LC_ALL="zh_CN.UTF-8"
 # auto open tmux
 if which tmux 2>&1 >/dev/null; then
     tm () {
-        # -2: Force tmux to assume the terminal supports 256 colours.
-        [ -z "$TMUX"  ] && (tmux -2 attach "$@" || tmux -2 new "$@")
+        if [ -z "$TMUX" ]; then
+            if [ -n "$(tmux ls)" ]; then
+                # -2: Force tmux to assume the terminal supports 256 colours.
+                tmux -2 attach "$@"
+            else
+                tmux -2 new "$@"
+            fi
+        fi
     }
     #export DISABLE_AUTO_TITLE=true
     export tm
-	#tm
 fi
 
