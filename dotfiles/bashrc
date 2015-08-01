@@ -147,13 +147,14 @@ export LC_ALL="zh_CN.UTF-8"
 
 # auto open tmux
 if which tmux 2>&1 >/dev/null; then
+    # -2: Force tmux to assume the terminal supports 256 colours.
+    alias tmux='tmux -2'
     tm () {
         if [ -z "$TMUX" ]; then
             if [ -n "$(tmux ls)" ]; then
-                # -2: Force tmux to assume the terminal supports 256 colours.
-                tmux -2 attach "$@"
+                tmux attach "$@"
             else
-                tmux -2 new "$@"
+                tmux new "$@"
             fi
         fi
     }
