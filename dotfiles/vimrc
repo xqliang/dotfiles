@@ -238,6 +238,10 @@ endfunc
 map <F5> :call Compile()<CR>
 map <F6> :call Run()<CR>
 
+" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+
 " Vim-plug
 "
 "   Minimalist Vim Plugin Manager
@@ -464,7 +468,7 @@ Plug 'scrooloose/nerdcommenter'
 
 " A tree explorer plugin for navigating the filesystem
 Plug 'scrooloose/nerdtree'
-nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F9> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
 " Open a NERDTree automatically when vim starts up if no files were specified
 autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
@@ -480,7 +484,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 
 Plug 'taglist.vim'
-nnoremap <F7> :TlistToggle<CR>
+nnoremap <F10> :TlistToggle<CR>
 let Tlist_Use_Right_Window=1
 
 
