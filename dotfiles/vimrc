@@ -20,6 +20,7 @@ call MakeDir($HOME . '/.vim/backup')
 call MakeDir($HOME . '/.vim/swap')
 
 set nocompatible
+set binary
 set modelines=5  " System vimrc shipped with OSX sets the modelines variable to 0
 " Prevent vim from trying to connect to the X server, it cause vim startup
 " too slow in tmux. (vim --startuptime log; cat log | sort -k 2 | tail)
@@ -237,69 +238,53 @@ endfunc
 map <F5> :call Compile()<CR>
 map <F6> :call Run()<CR>
 
-
-" Vundle
+" Vim-plug
 "
-"   The plug-in manager for Vim
+"   Minimalist Vim Plugin Manager
 "
 " INSTALL:
-"   $ sudo apt-get install git
-"   $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-"   $ vim +BundleInstall +qall
+"   $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 "
 " Brief help
-"   :BundleList          - list configured bundles
-"   :BundleInstall(!)    - install (update) bundles
-"   :BundleSearch(!) foo - search (or refresh cache first) for foo
-"   :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
+"   :PlugInstall [name ...]  - Install plugins
+"   :PlugUpdate [name ...]   - Install or update plugins
+"   :PlugClean[!]            - Remove unused directories
+"   :PlugUpgrade             - Upgrade vim-plug itself
 
-" Auto setting up Vundle
+" Auto setting up Vim-plug
 " see http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
-let iCanHazVundle=1
-let vundleReadme=expand('~/.vim/bundle/vundle/README.md')
-if !filereadable(vundleReadme)
-    if !executable('git')
-        finish
-    endif"
-    echo "Installing Vundle..."
+let iCanHazPlugMgr=1
+let plugMgrFile=expand('~/.vim/autoload/plug.vim')
+if !filereadable(plugMgrFile)
+    echo "Installing plugin manager..."
     echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-    let iCanHazVundle=0
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    let iCanHazPlugMgr=0
 endif
 
-set nocompatible              " be iMproved
-"filetype off                  " required!
+call plug#begin('~/.vim/plugged')
 
-
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-
-" Let Vundle manage Vundle, required!
-Bundle 'gmarik/vundle'
-
+" Make sure you use single quotes
 
 " Python syntax check on the fly
 if has("python")
-    Bundle 'pyflakes.vim'
+    Plug 'pyflakes.vim'
 endif
 
 
 " Automatically detect indent (expandtab, shiftwidth, tabstop) settings
-"Bundle 'roryokane/detectindent'
+"Plug 'roryokane/detectindent'
 "autocmd BufReadPost * if exists(":DetectIndent") | :DetectIndent | endif
 
 
 " Syntax checking hacks for vim
-Bundle 'scrooloose/syntastic.git'
+"Plug 'scrooloose/syntastic'
 
 
-Bundle 'xqliang/Vim-JDE'
-set omnifunc=VjdeCompletionFun
+"Plug 'xqliang/Vim-JDE'
+"set omnifunc=VjdeCompletionFun
 " Make sure console message in english
 let $LANG='en_US'
 language messages en_US.UTF-8
@@ -322,7 +307,7 @@ if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
 
 
 " Set 'path' from the Java/VIM-JDE class path
-Bundle 'xqliang/vim-classpath'
+Plug 'xqliang/vim-classpath'
 
 
 " Auto generate tags & scope files, for python, install pycsope==0.3
@@ -331,7 +316,7 @@ Bundle 'xqliang/vim-classpath'
 "   <F4> (re)Generate tags&cscope.out
 "   <F3> Add addtional ctags file
 if executable('cscope') && executable('ctags') && executable('md5sum')
-    Bundle 'basilgor/vim-autotags'
+    Plug 'basilgor/vim-autotags'
     let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+px --fields=+ialS
             \ --extra=+q"
     let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
@@ -346,20 +331,20 @@ endif
 " KEYS:
 "   <C-\>{s|g|d|c|t|e|f|i} Find symbol|definition|called by|calling this|
 "                          text string|egrep|file|files #including this file
-Bundle 'steffanc/cscopemaps.vim'
+Plug 'steffanc/cscopemaps.vim'
 
 
 " Text Objects based on Indentation Level
 " KEYS:
 "   vai, vii, vaI
-"Bundle 'vim-indent-object'
+"Plug 'vim-indent-object'
 
 
 " Expand/shrink region in V mode
 " KEYS:
 "   + Expand region
 "   - Shrink region
-"Bundle 'terryma/vim-expand-region'
+"Plug 'terryma/vim-expand-region'
 
 
 " Pairs of handy bracket mappings
@@ -370,18 +355,18 @@ Bundle 'steffanc/cscopemaps.vim'
 "   [q                is :cprevious
 "   ]a                is :next
 "   [b                is :bprevious
-Bundle 'tpope/vim-unimpaired.git'
+Plug 'tpope/vim-unimpaired'
 nnoremap cop :setlocal paste!<cr>
 
 
 " Toggle locationlist, quickfix: <leader>l|q
-Bundle 'Valloric/ListToggle'
+Plug 'Valloric/ListToggle'
 nnoremap coq :QToggle<CR>
 nnoremap coL :LToggle<CR>
 
 
 " Status line (replace vim-powerline)
-Bundle 'bling/vim-airline'
+Plug 'bling/vim-airline'
 set laststatus=2 " Always show the statusline
 set t_Co=256     " Explicitly tell Vim that the terminal supports 256 colors
 let g:airline_left_sep=''
@@ -396,7 +381,7 @@ let g:airline_section_z='%2p%% %2l:%-2c'
 "   <c-^>    Prev buffer
 "   :e#      Next buffer
 "   :ls      List buffers
-"Bundle 'buftabs'
+"Plug 'buftabs'
 "nnoremap <leader>bt :call Buftabs_show(-1)<CR>
 "nnoremap <leader>bp :bp<CR>
 "nnoremap <leader>bn :bn<CR>
@@ -405,7 +390,7 @@ let g:airline_section_z='%2p%% %2l:%-2c'
 
 
 " Insert or delete brackets, parens, quotes in pair
-Bundle 'xqliang/Auto-Pairs'
+Plug 'xqliang/Auto-Pairs'
 " Confict when xptemplate restore <CR> mapping, so disable it
 let g:AutoPairsMapCR=0
 
@@ -415,7 +400,7 @@ let g:AutoPairsMapCR=0
 " KEYS:
 "   <C-R><C-R><C-\> List all snippets
 "   xxx<C-\>        Show xxx snippet, use <Tab>/<S-Tab> for navigation
-Bundle 'drmingdrmer/xptemplate'
+Plug 'drmingdrmer/xptemplate'
 
 
 " Provides mappings to easily delete, change and add such surroundings in pairs
@@ -426,11 +411,11 @@ Bundle 'drmingdrmer/xptemplate'
 "  yS  - add a surrounding and place the surrounded text on a new line + indent it
 "  yss - add a surrounding to the whole line
 "  ySs/ySS  - add a surrounding to the whole line, place it on a new line + indent it
-Bundle 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 
 
 " Extended % matching for HTML, LaTeX, and many other languages
-Bundle 'tmhedberg/matchit'
+Plug 'tmhedberg/matchit'
 
 
 " Fast and Easy Find and Replace Across Multiple Files
@@ -438,7 +423,7 @@ Bundle 'tmhedberg/matchit'
 "   <leader>{vv|vV|va|vA|vr|vo} Grep for the word under the cursor, match all
 "                               occurences
 "   :ReplaceUndo                Undoes the last :Replace operation
-"Bundle 'EasyGrep'
+"Plug 'EasyGrep'
 "function! ToggleEasyGrepMode()
 "    if g:EasyGrepMode == 2
 "        let g:EasyGrepMode=0
@@ -455,7 +440,7 @@ Bundle 'tmhedberg/matchit'
 " Fuzzy file, buffer, mru, tag, etc finder
 " KEYS:
 "   <C-P>
-Bundle 'kien/ctrlp.vim.git'
+Plug 'kien/ctrlp.vim'
 let g:ctrlp_cmd='CtrlPMixed'
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
 
@@ -467,19 +452,19 @@ let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
 "   [count]<leader>cu       Uncomments the selected line(s)
 "   [count]<leader>cA       Adds comment delimiters to the end of line and goes
 "                           into insert mode between them. 
-Bundle 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 
 
 " Simplify Doxygen documentation in C, C++, Python
-"Bundle 'DoxygenToolkit.vim'
+"Plug 'DoxygenToolkit.vim'
 "nnoremap <leader>do :Dox<CR>
 "nnoremap <leader>da :DoxAuthor<CR>
 "nnoremap <leader>db :DoxBlock<CR>
 
 
 " A tree explorer plugin for navigating the filesystem
-Bundle 'scrooloose/nerdtree'
-map <F2> :NERDTreeToggle<CR>
+Plug 'scrooloose/nerdtree'
+nnoremap <F2> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
 " Open a NERDTree automatically when vim starts up if no files were specified
 autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
@@ -488,21 +473,39 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 
 " Displays tags in a window, ordered by class etc (replace taglist.vim)
-"Bundle 'Tagbar'
+"Plug 'Tagbar'
 "nnoremap <leader>tb :TagbarToggle<CR>
 "let g:tagbar_width=30
 "au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
-Bundle 'taglist.vim'
+Plug 'taglist.vim'
 nnoremap <F7> :TlistToggle<CR>
 let Tlist_Use_Right_Window=1
 
 
 " Molokai color scheme
-Bundle 'molokai'
+Plug 'molokai'
 silent! colorscheme desert
 silent! colorscheme molokai
+
+
+" Awesome Python autocompletion with VIM
+"
+" INSTALL:
+"   $ sudo pip install jedi
+"
+" KEYS:
+"   <leader>g Goto assignments (typical goto function)
+"   <leader>d Goto definitions (follow identifier as far as possible, includes imports and statements)
+"   <leader>r Renaming
+"   <leader>n Shows all the usages of a name
+"   <C-n>     Completion
+"   K         Show Documentation/Pydoc (shows a popup with assignments)
+Plug 'davidhalter/jedi-vim'
+let g:jedi#completions_command = "<C-n>"
+let g:jedi#completions_enabled = 1
+let g:jedi#show_call_signatures = "1"
 
 
 if v:version >= 704 || (v:version == 703 && has("patch584"))
@@ -512,67 +515,52 @@ if v:version >= 704 || (v:version == 703 && has("patch584"))
     "   see https://github.com/Valloric/YouCompleteMe
     "
     " NOTE:
-    "   cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer
+    "   cd ~/.vim/plugged/YouCompleteMe && ./install.py --clang-completer
     "
     " KEYS:
     "   <leader>g   Goto definition or declaration
     "   <C-O>/<C-I> Jump back or forward
-    Bundle 'Valloric/YouCompleteMe'
+    "Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
     "set g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
-    let g:ycm_complete_in_comments=1
-    let g:ycm_collect_identifiers_from_comments_and_strings=1
-    let g:ycm_collect_identifiers_from_tags_files=1
-    noremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+    "let g:ycm_complete_in_comments=1
+    "let g:ycm_collect_identifiers_from_comments_and_strings=1
+    "let g:ycm_collect_identifiers_from_tags_files=1
+    "noremap <leader>jc :YcmCompleter GoToDeclaration<CR>
+    "noremap <leader>jd :YcmCompleter GoToDefinition<CR>
+    "noremap <leader>jr :YcmCompleter GoToReferences<CR>
 else
     " Perform all your vim insert mode completions with Tab
-    Bundle 'ervandew/supertab'
+    Plug 'ervandew/supertab'
     let g:SuperTabDefaultCompletionType=""
 
 
     " Ultimate auto-completion system
-    Bundle 'Shougo/neocomplcache.vim'
+    Plug 'Shougo/neocomplcache.vim'
     let g:neocomplcache_enable_at_startup=1
     let g:neocomplcache_disable_auto_complete=1
 
 
-    " Awesome Python autocompletion with VIM
-    "
-    " INSTALL:
-    "   $ sudo pip install jedi
-    "
-    " KEYS:
-    "   <leader>g Goto assignments (typical goto function)
-    "   <leader>d Goto definitions (includes imports and statements)
-    "   <leader>r Renaming
-    "   <leader>n Shows all the usages of a name
-    "   <C-\>     Completion
-    "   K         Show Documentation/Pydoc
-    "Bundle 'davidhalter/jedi-vim'
-    "let g:jedi#completions_command = "<C-\>"
-    "let g:jedi#completions_enabled = 1
-
-
     " Show function prototype in command line when type '('
-    "Bundle 'echofunc.vim'
+    "Plug 'echofunc.vim'
 
 
     " Smart Space key for Vim
     " KEYS:
     "   <SPACE>        A clever key to repeat motions
     "   <S-SPACE>/<BS> Inverse <SPACE>
-    "Bundle 'spiiph/vim-space'
+    "Plug 'spiiph/vim-space'
 endif
 
 
 " Zoom in/out of windows
 " KEYS:
 "   <C-W>o Toggle window size
-Bundle 'regedarek/ZoomWin'
+Plug 'regedarek/ZoomWin'
 
 
 if has("conceal")
     " Display the indention levels with thin vertical lines
-    "Bundle 'Yggdroot/indentLine'
+    "Plug 'Yggdroot/indentLine'
     "nnoremap <leader>il :IndentLinesToggle<CR>
     " NOTE: too slow when file lines > 2K
     "let g:indentLine_fileType=['python', 'java', 'h', 'c', 'cpp']
@@ -581,18 +569,18 @@ endif
 
 
 " Other maybe useful plugins
-"Bundle 'Mark'
-"Bundle 'python_match.vim'
-"Bundle 'TxtBrowser'
-"Bundle 'YankRing.vim'
+"Plug 'Mark'
+"Plug 'python_match.vim'
+"Plug 'TxtBrowser'
+"Plug 'YankRing.vim'
 
+" Add plugins to &runtimepath
+call plug#end()
 
-filetype plugin indent on     " required!
-
-if iCanHazVundle == 0
-    echo "Installing Bundles, please ignore key map error messages"
+if iCanHazPlugMgr == 0
+    echo "Installing plugins, please ignore key map error messages"
     echo ""
-    :BundleInstall
+    :PlugInstall
 endif
 
 " vim: et tw=4 sw=4
