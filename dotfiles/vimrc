@@ -242,6 +242,7 @@ map <F6> :call Run()<CR>
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 
+
 " Vim-plug
 "
 "   Minimalist Vim Plugin Manager
@@ -256,6 +257,7 @@ set pastetoggle=<F2>
 "   :PlugClean[!]            - Remove unused directories
 "   :PlugUpgrade             - Upgrade vim-plug itself
 
+
 " Auto setting up Vim-plug
 " see http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
 let iCanHazPlugMgr=1
@@ -263,8 +265,8 @@ let plugMgrFile=expand('~/.vim/autoload/plug.vim')
 if !filereadable(plugMgrFile)
     echo "Installing plugin manager..."
     echo ""
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    execute "!" "curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
     let iCanHazPlugMgr=0
 endif
 
