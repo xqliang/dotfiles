@@ -97,6 +97,12 @@ endif
 set t_ti= t_te=
 set timeout timeoutlen=800 ttimeoutlen=100
 
+" 解决超长行移动光标困难
+:nmap <UP> gk
+:imap <UP> <ESC>gka
+:nmap <DOWN> gj
+:imap <DOWN> <ESC>gja
+
 " Color
 syntax enable
 filetype plugin on
