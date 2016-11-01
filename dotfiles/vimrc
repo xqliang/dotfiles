@@ -71,7 +71,7 @@ endif
 set autoindent
 set cindent              " Make sure '#' input in .py file won't goto column 1
 set backspace=indent,eol,start " Allow backspacing over everything in insert mode
-set cursorline
+"set cursorline
 set noexpandtab
 set foldmethod=syntax
 set foldlevel=100        " Do not fold when open file
@@ -83,7 +83,7 @@ set shiftwidth=4
 set smartindent
 set smarttab
 set tabstop=4
-"set textwidth=78
+set textwidth=80
 if v:version >= 703
     call MakeDir($HOME . '/.vim/undo')
     set undofile        " Keep a persistent undo file
@@ -96,7 +96,6 @@ endif
 " Or put it to .bashrc: export LESS="-X"
 set t_ti= t_te=
 set timeout timeoutlen=800 ttimeoutlen=100
-
 
 " Color
 syntax enable
@@ -243,6 +242,10 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 
 
+" <F7> 切换行号显示
+nnoremap <F7> :set nonu!<CR>:set foldcolumn=0<CR>
+
+
 " Vim-plug
 "
 "   Minimalist Vim Plugin Manager
@@ -292,10 +295,10 @@ endif
 "Plug 'xqliang/Vim-JDE'
 "set omnifunc=VjdeCompletionFun
 " Make sure console message in english
-let $LANG='en_US'
-language messages en_US.UTF-8
-let g:vjde_java_exception='\(unreported exception \)\([^ \t;]*\);'
-if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
+"let $LANG='en_US'
+"language messages en_US.UTF-8
+"let g:vjde_java_exception='\(unreported exception \)\([^ \t;]*\);'
+"if exists($CLASPATH) | let g:vjde_lib_path=$CLASPATH | endif
 " KEYS:
 "   :Vjdec     Do compile
 "   :Vjdei     Goto definition
@@ -473,7 +476,7 @@ Plug 'scrooloose/nerdtree'
 nnoremap <F9> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
 " Open a NERDTree automatically when vim starts up if no files were specified
-autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
+"autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
 " Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q! | endif
 
