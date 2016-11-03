@@ -333,7 +333,8 @@ Plug 'xqliang/vim-classpath'
 if executable('cscope') && executable('ctags') && executable('md5sum')
     Plug 'basilgor/vim-autotags'
     let g:autotags_ctags_opts="--python-kinds=-iv --c++-kinds=+px --fields=+ialS
-            \ --extra=+q"
+            \ --extra=+q --exclude=*.html --exclude=*.js --exclude=*.css
+            \ --exclude=*.log"
     let g:autotags_cscope_file_extensions=".py .cpp .cc .cxx .m .hpp .hh .h .hxx
             \ .c .idl .java"
     au BufEnter *.py let g:autotags_no_global=1 | if executable('pycscope.py') |
