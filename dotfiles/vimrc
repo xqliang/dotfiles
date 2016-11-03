@@ -283,6 +283,23 @@ call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
 
+" A Git wrapper
+Plug 'tpope/vim-fugitive'
+nnoremap <leader>gi :Git 
+" git add %
+nnoremap <leader>ga :Gwrite<CR>
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gs :Gdiff --cached<CR>
+" git checkout %
+nnoremap <leader>go :Gread<CR>
+" Rename the current file and the corresponding Vim buffer
+nnoremap <leader>gm :Gmove<CR>
+" Delete the current file and the corresponding Vim buffer
+nnoremap <leader>gr :Gremove<CR>
+
+
 " Python syntax check on the fly
 if has("python")
     Plug 'pyflakes.vim'
