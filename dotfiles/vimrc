@@ -252,6 +252,10 @@ set pastetoggle=<F2>
 nnoremap <F7> :set nonu!<CR>:set foldcolumn=0<CR>
 
 
+nnoremap <leader>\ :vsp 
+nnoremap <leader>- :sp 
+
+
 " Vim-plug
 "
 "   Minimalist Vim Plugin Manager
@@ -416,8 +420,8 @@ let g:airline_section_z='%2p%% %2l:%-2c'
 "   :ls      List buffers
 "Plug 'buftabs'
 "nnoremap <leader>bt :call Buftabs_show(-1)<CR>
-"nnoremap <leader>bp :bp<CR>
-"nnoremap <leader>bn :bn<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
 "let g:buftabs_only_basename=1
 "let g:buftabs_separator=" "
 
@@ -499,6 +503,8 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 nnoremap <F9> :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.class$', '\.o$']
+" http://superuser.com/questions/195022/vim-how-to-synchronize-nerdtree-with-current-opened-tab-file-path
+map <leader>f :NERDTreeFind<CR>
 " Open a NERDTree automatically when vim starts up if no files were specified
 "autocmd vimenter * if !argc() && exists(":NERDTree") | NERDTree | endif
 " Close vim if the only window left open is a NERDTree
