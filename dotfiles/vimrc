@@ -547,6 +547,23 @@ let g:jedi#completions_enabled = 1
 let g:jedi#show_call_signatures = "1"
 
 
+" Python code folding for Vim
+"
+" KEYS:
+"   za and <space> Toggle fold
+"   zc Close the fold at the cursor
+"   zo Open the fold at the cursor
+"   zR Open all folds
+"   zM Close all folds
+"   zj and zk Jump from one fold to another
+Plug 'tmhedberg/SimpylFold'
+let g:SimpylFold_docstring_preview = 1
+nnoremap <space> za
+vnoremap <space> zf
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+
+
 if v:version >= 704 || (v:version == 703 && has("patch584"))
     " A code-completion engine (repalce SuperTab & neocomplcache)
     "
