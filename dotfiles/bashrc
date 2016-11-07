@@ -152,9 +152,9 @@ if which tmux 2>&1 >/dev/null; then
     tm () {
         if [ -z "$TMUX" ]; then
             if [ -n "$(tmux ls)" ]; then
-                tmux attach "$@"
+                tmux -2 attach "$@"
             else
-                tmux new "$@"
+                tmux -2 new "$@"
             fi
         fi
     }
