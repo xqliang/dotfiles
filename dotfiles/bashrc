@@ -108,7 +108,8 @@ fi
 
 export PYTHONSTARTUP=~/.pythonstartup
 # see http://www.shallowsky.com/linux/noaltscreen.html
-export LESS='-X'
+#     http://excid3.com/blog/how-to-fix-esc-in-your-terminal
+export LESS='-rX'
 export GREP_OPTIONS='--exclude-dir=.svn --exclude-dir=.git --color=auto -nrI'
 
 # alias
