@@ -532,6 +532,7 @@ silent! colorscheme molokai
 " Awesome Python autocompletion with VIM
 "
 " INSTALL:
+"   $ sudo apt-get install vim-nox  # VIM with Python support
 "   $ sudo pip install jedi
 "
 " KEYS:
@@ -541,10 +542,14 @@ silent! colorscheme molokai
 "   <leader>n Shows all the usages of a name
 "   <C-n>     Completion
 "   K         Show Documentation/Pydoc (shows a popup with assignments)
-Plug 'davidhalter/jedi-vim'
-let g:jedi#completions_command = "<C-n>"
-let g:jedi#completions_enabled = 1
-let g:jedi#show_call_signatures = "1"
+if has("python")
+    Plug 'davidhalter/jedi-vim'
+    let g:jedi#completions_command = "<C-n>"
+    let g:jedi#completions_enabled = 1
+    let g:jedi#show_call_signatures = "1"
+    " Disable docstring window to popup during completion
+    autocmd FileType python setlocal completeopt-=preview
+endif
 
 
 " Python code folding for Vim
