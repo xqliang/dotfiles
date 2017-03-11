@@ -47,3 +47,7 @@ fi
 export GREP_OPTIONS="--color=auto --exclude-dir=\.svn --exclude=*.pyc --exclude=tags"
 export LANG=zh_CN.UTF8
 export LC_MESSAGES=en_US.UTF8
+
+# Git Commit Problem: "error: There was a problem with the editor 'vi'"
+# See https://github.com/VundleVim/Vundle.vim/issues/167#issuecomment-55700048
+export EDITOR=$(which vim)
