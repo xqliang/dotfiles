@@ -306,7 +306,7 @@ nnoremap <leader>gr :Gremove<CR>
 
 " Python syntax check on the fly
 if has("python")
-    Plug 'pyflakes.vim'
+    Plug 'kevinw/pyflakes-vim'
 endif
 
 
@@ -518,13 +518,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "au filetype python,java,c,cpp silent! nested :TagbarOpen
 
 
-Plug 'taglist.vim'
+Plug 'vim-scripts/taglist.vim'
 nnoremap <F10> :TlistToggle<CR>
 let Tlist_Use_Right_Window=1
 
 
 " Molokai color scheme
-Plug 'molokai'
+Plug 'tomasr/molokai'
 silent! colorscheme desert
 silent! colorscheme molokai
 
