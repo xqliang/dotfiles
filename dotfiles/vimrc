@@ -110,7 +110,7 @@ filetype plugin on
 " Hilight text over length (set colorcolumn=80)
 au BufEnter *.py,*.c,*.cpp,*.h,*.java silent! setlocal colorcolumn=80
 au filetype python,c,cpp,h,java,javascript,css setlocal number
-au filetype vim,python,c,cpp,h,java,rst,ruby,javascript,css setlocal list
+au filetype vim,python,c,cpp,h,java,rst,ruby,javascript,css,ini,conf,json,xml,yaml setlocal list
 
 " Have Vim jump to the last position when reopening a file
 au BufReadPost * exe "normal! g`\""
@@ -565,8 +565,8 @@ Plug 'tmhedberg/SimpylFold'
 let g:SimpylFold_docstring_preview = 1
 nnoremap <space> za
 vnoremap <space> zf
-autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
-autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+"autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+"autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
 
 if v:version >= 704 || (v:version == 703 && has("patch584"))
