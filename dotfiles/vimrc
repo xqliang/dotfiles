@@ -122,8 +122,8 @@ nnoremap ; :
 cnoremap jj <C-U><Esc>
 " Quickly get out of insert mode without your fingers having to leave the
 " home row, equals to <ESC>,<C-C>,<C-[>
-inoremap jj <Esc>
-inoremap jw <Esc>:w<CR>a
+"inoremap jj <Esc>
+"inoremap jw <Esc>:w<CR>a
 " Quickly Esc, save file, close file and reload vimrc
 nnoremap <leader><leader>w :w<CR>
 nnoremap <leader><leader>q :q<CR>
