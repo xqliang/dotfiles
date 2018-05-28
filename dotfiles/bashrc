@@ -117,7 +117,7 @@ alias -- svndi='svn di $@|view --noplugin -'
 
 # see http://superuser.com/questions/249293/rename-tmux-window-name-to-prompt-command-ps1-or-remote-ssh-hostname
 ssh() {
-	if [ -z "`readlink -f $SSH_AUTH_SOCK`"  ]; then
+	if [ -z "`readlink -f \"$SSH_AUTH_SOCK\"`" ]; then
 		# Fix "Permission denied (publickey)." problem.
 		sock="`find /tmp -user $USER -path '/tmp/ssh-*/*' 2>/dev/null|head -1`"
 		if [ ! -z "$sock"  ]; then
