@@ -152,6 +152,9 @@ if which tmux 2>&1 >/dev/null; then
     alias tmux='tmux -2'
     tm () {
         if [ -z "$TMUX" ]; then
+            # https://stackoverflow.com/a/41422154
+            # failed to connect to server: Connection refused
+            pkill -u $(whoami) -USR1 tmux
             if [ -n "$(tmux ls)" ]; then
                 tmux -2 attach "$@"
             else
