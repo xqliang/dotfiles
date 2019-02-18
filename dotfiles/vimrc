@@ -414,7 +414,8 @@ nnoremap coL :LToggle<CR>
 
 
 " Status line (replace vim-powerline)
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 set laststatus=2 " Always show the statusline
 set t_Co=256     " Explicitly tell Vim that the terminal supports 256 colors
 let g:airline_left_sep=''
