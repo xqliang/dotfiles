@@ -83,7 +83,7 @@ set shiftwidth=4
 set smartindent
 set smarttab
 set tabstop=4
-set textwidth=80
+set textwidth=100
 if v:version >= 703
     call MakeDir($HOME . '/.vim/undo')
     set undofile        " Keep a persistent undo file
@@ -108,7 +108,8 @@ syntax enable
 filetype plugin on
 
 " Hilight text over length (set colorcolumn=80)
-au BufEnter *.py,*.c,*.cpp,*.h,*.java silent! setlocal colorcolumn=80
+au BufEnter *.py,*.c,*.cpp,*.h,*.java silent! setlocal colorcolumn=+1
+au BufEnter *.py,*.c,*.cpp,*.h,*.java silent! hi ColorColumn ctermbg=brown guibg=brown
 au filetype python,c,cpp,h,java,javascript,css setlocal number
 au filetype vim,python,c,cpp,h,java,rst,ruby,javascript,css,ini,conf,json,xml,yaml,sql setlocal list
 
