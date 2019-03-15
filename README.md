@@ -1,6 +1,8 @@
 Dotfiles
 ========
 
+[![Join the chat at https://gitter.im/xqliang/dotfiles](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xqliang/dotfiles?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A bunch of configuration files for editors and other UNIX tools.
 
 Installation
