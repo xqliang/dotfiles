@@ -110,7 +110,10 @@ export PYTHONSTARTUP=~/.pythonstartup
 # see http://www.shallowsky.com/linux/noaltscreen.html
 #     http://excid3.com/blog/how-to-fix-esc-in-your-terminal
 export LESS='-rX'
-export GREP_OPTIONS='--exclude-dir=.svn --exclude-dir=.git --color=auto -nrI'
+
+# Fix: warning: GREP_OPTIONS is deprecated; please use an alias or script
+unset GREP_OPTIONS
+export grep='grep --exclude-dir=.svn --exclude-dir=.git --color=auto -nI'
 
 # alias
 alias -- svndi='svn di $@|view --noplugin -'
