@@ -138,16 +138,32 @@ ssh() {
     fi
 }
 
-# see http://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
+# Auto setup ssh-agent
+# https://kb.iu.edu/d/aeww
+# http://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
 SSH_SOCK=/tmp/ssh-agent-$USER
-if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$SSH_SOCK" ] ; then
-    rm -f $SSH_SOCK
+SSH_AGENT=/tmp/ssh-pid-$USER
+if [ -S $SSH_SOCK -a -f $SSH_AGENT ] && ps -p $(cat $SSH_AGENT) >/dev/null 2>&1; then
+    if [ "$SSH_AUTH_SOCK" != $(readlink $SSH_SOCK) ]; then
+        # Recover SSH AUTH env
+        export SSH_AUTH_SOCK=$(readlink $SSH_SOCK)
+        export SSH_AGENT_PID=$(cat $SSH_AGENT)
+    fi
+else
+    if [ ! -z "$SSH_AUTH_SOCK" -a ! -z "$SSH_AGENT_PID" ] && ps -p $SSH_AGENT_PID >/dev/null 2>&1; then
+        # echo "Agent pid $SSH_AGENT_PID"
+        true
+    else
+        eval `ssh-agent`
+        ssh-add
+    fi
+    rm -f $SSH_SOCK $SSH_AGENT
     ln -sf $SSH_AUTH_SOCK $SSH_SOCK
-    export SSH_AUTH_SOCK=$SSH_SOCK
+    echo $SSH_AGENT_PID > $SSH_AGENT
 fi
 
 # tmux encoding issue, see http://popozhu.github.io/2013/11/06/tmux%EF%BC%8C%E4%B9%B1%E7%A0%81%E5%B7%B2%E6%88%90%E5%BE%80%E4%BA%8B/
-export LC_ALL="zh_CN.UTF-8"
+#export LC_ALL="zh_CN.UTF-8"
 
 # auto open tmux
 if which tmux 2>&1 >/dev/null; then
