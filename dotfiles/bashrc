@@ -120,21 +120,29 @@ alias -- svndi='svn di $@|view --noplugin -'
 
 # see http://superuser.com/questions/249293/rename-tmux-window-name-to-prompt-command-ps1-or-remote-ssh-hostname
 ssh() {
-	if [ -z "`readlink -f \"$SSH_AUTH_SOCK\"`" ]; then
-		# Fix "Permission denied (publickey)." problem.
-		sock="`find /tmp -user $USER -path '/tmp/ssh-*/*' 2>/dev/null|head -1`"
-		if [ ! -z "$sock"  ]; then
-			ln -sf $sock $SSH_SOCK
-		fi
-	fi
-    if [ $# == 1 -a "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ]; then
-		# run 'ssh user@host' in tmux, rename window name to 'ssh@ip'
-		tmux rename-window "${1:0:6}@`command ssh \"$@\" printenv SSH_CONNECTION|cut -d\  -f3`"
-		command ssh "$@"
-		tmux set-window-option automatic-rename "on" 1>/dev/null
+    if [ -z "`readlink -f \"$SSH_AUTH_SOCK\"`" ]; then
+        # Fix "Permission denied (publickey)." problem.
+        sock="`find /tmp -user $USER -path '/tmp/ssh-*/*' 2>/dev/null|head -1`"
+        if [ ! -z "$sock"  ]; then
+            ln -sf $sock $SSH_SOCK
+        fi
+    fi
+
+    if [[ "$(uname -s)" == CYGWIN_NT* ]]; then
+        # Fix "ps: unknown option --o", See https://github.com/rvm/rvm/issues/4354
+        parent_proc="$(command ps -p "$(command ps -p $$ | command awk 'END {print $2}')" | command awk -F' |/' 'END {print $NF}')"
     else
-		# run 'ssh xxx' out of tmux or 'ssh user@host xxx' in tmux
-		command ssh "$@"
+        parent_proc="$(command ps -p "$(command ps -p $$ -o ppid=)" -o comm=)"
+    fi
+
+    if [ $# == 1 -a "$parent_proc" = "tmux" ]; then
+        # run 'ssh user@host' in tmux, rename window name to 'ssh@ip'
+        tmux rename-window "${1:0:6}@`command ssh \"$@\" printenv SSH_CONNECTION|cut -d\  -f3`"
+        command ssh "$@"
+        tmux set-window-option automatic-rename "on" 1>/dev/null
+    else
+        # run 'ssh xxx' out of tmux or 'ssh user@host xxx' in tmux
+        command ssh "$@"
     fi
 }
 
@@ -143,23 +151,30 @@ ssh() {
 # http://hoelz.ro/blog/making-ssh_auth_sock-work-between-detaches-in-tmux
 SSH_SOCK=/tmp/ssh-agent-$USER
 SSH_AGENT=/tmp/ssh-pid-$USER
-if [ -S $SSH_SOCK -a -f $SSH_AGENT ] && ps -p $(cat $SSH_AGENT) >/dev/null 2>&1; then
+if [ -S $SSH_SOCK -a -f $SSH_AGENT ] && ps -p "$(cat $SSH_AGENT)" >/dev/null 2>&1; then
     if [ "$SSH_AUTH_SOCK" != $(readlink $SSH_SOCK) ]; then
         # Recover SSH AUTH env
         export SSH_AUTH_SOCK=$(readlink $SSH_SOCK)
         export SSH_AGENT_PID=$(cat $SSH_AGENT)
     fi
 else
-    if [ ! -z "$SSH_AUTH_SOCK" -a ! -z "$SSH_AGENT_PID" ] && ps -p $SSH_AGENT_PID >/dev/null 2>&1; then
-        # echo "Agent pid $SSH_AGENT_PID"
+    ssh_pid=$SSH_AGENT_PID
+    if [ -z "$ssh_pid" ]; then
+        ssh_pid=$SSH_PAGEANT_PID
+    fi
+    if [ ! -z "$SSH_AUTH_SOCK" -a ! -z "$ssh_pid" ] && ps -p "$ssh_pid" >/dev/null 2>&1; then
+        # echo "Agent pid $ssh_pid"
         true
+    elif [ "$HOME" = /home/mobaxterm ]; then
+        # MobaXterm will auto manage ssh-agent and key
+	true
     else
         eval `ssh-agent`
         ssh-add
     fi
     rm -f $SSH_SOCK $SSH_AGENT
     ln -sf $SSH_AUTH_SOCK $SSH_SOCK
-    echo $SSH_AGENT_PID > $SSH_AGENT
+    echo $ssh_pid > $SSH_AGENT
 fi
 
 # tmux encoding issue, see http://popozhu.github.io/2013/11/06/tmux%EF%BC%8C%E4%B9%B1%E7%A0%81%E5%B7%B2%E6%88%90%E5%BE%80%E4%BA%8B/
@@ -184,4 +199,3 @@ if which tmux 2>&1 >/dev/null; then
     #export DISABLE_AUTO_TITLE=true
     export tm
 fi
-
